@@ -1,12 +1,13 @@
-import { Movie } from '../../reducers/movies';
-import { connect, useDispatch } from 'react-redux';
+import { Movie, fetchMovies } from '../../reducers/movies';
 import { RootState } from '../../store';
-import MovieCard  from './MovieCard';
+import MovieCard from './MovieCard';
+import { useAppDispatch } from '../../hooks';
 
 import styles from './Movies.module.scss';
+
 import { useEffect } from 'react';
-import { client } from '../../api/tmdb';
-import { moviesLoaded, moviesLoading } from '../../reducers/movies';
+import { connect } from 'react-redux';
+
 
 interface MoviesProps {
     movies: Movie[];
@@ -14,29 +15,10 @@ interface MoviesProps {
 }
 
 function Movies({ movies, loading }: MoviesProps) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        async function loadData() {
-            dispatch(moviesLoading());
-
-            const config : any = await client.getConfiguration();
-            const imageUrl = config.images.base_url;
-            const results = await client.getNowPlaying();
-
-            const mappedResults: Movie[] = results.map((m) => ({
-                id: m.id,
-                title: m.title,
-                popularity: m.popularity,
-                overview: m.overview,
-                image: m.backdrop_path
-                        ? `${imageUrl}w780${m.backdrop_path}`
-                        : undefined,
-            }));
-            dispatch(moviesLoaded(mappedResults));
-        }
-        
-        loadData();
+        dispatch(fetchMovies());
     }, [dispatch]);
 
     return (

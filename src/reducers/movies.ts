@@ -1,4 +1,6 @@
-import {createReduser, ActionWithPayload} from "../redux/utils";
+import { createReduser, ActionWithPayload } from "../redux/utils";
+import { AppThunk } from "../store";
+import { client } from "../api/tmdb";
 
 export interface Movie {
     id: number;
@@ -18,14 +20,35 @@ const initialState: MovieState = {
     loading: false,
 };
 
-export const moviesLoaded = (movies: Movie[]) => ({
+const moviesLoaded = (movies: Movie[]) => ({
     type: "movies/loaded",
     payload: movies,
 });
 
-export const moviesLoading = () => ({
+const moviesLoading = () => ({
     type: "movies/loading",
-})
+});
+
+export function fetchMovies(): AppThunk<Promise<void>> {  
+    return async (dispatch, getState) => {
+            dispatch(moviesLoading());
+
+            const config : any = await client.getConfiguration();
+            const imageUrl = config.images.base_url;
+            const results = await client.getNowPlaying();
+
+            const mappedResults: Movie[] = results.map((m) => ({
+                id: m.id,
+                title: m.title,
+                popularity: m.popularity,
+                overview: m.overview,
+                image: m.backdrop_path
+                        ? `${imageUrl}w780${m.backdrop_path}`
+                        : undefined,
+            }));
+            dispatch(moviesLoaded(mappedResults));
+    }
+}
 
 const moviesReducer = createReduser<MovieState>(
     initialState,
