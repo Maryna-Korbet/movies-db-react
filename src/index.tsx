@@ -12,19 +12,20 @@ import store from './store';
 const router = createBrowserRouter([
   {
     path: '/',
-    element:
-      <Provider store = {store}>
+    element: (
+      <Provider store={store}>
         <App />
-      </Provider>,
-    children:[
+      </Provider>
+      ),
+    children: [
       {
-        path: 'about',  
-        element: <About />,
+        path: '/movies',
+        element: <Movies />,
       },
       {
-        path: 'movies',
-        element: <Movies />,
-      }
+        path: '/about',  
+        element: <About />,
+      }, 
     ],
   },
 ]);
