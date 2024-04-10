@@ -36,12 +36,10 @@ interface Configuration {
 export const client = {
     
     async getConfiguration() {
-        console.log('START getConfiguration');
         return await get<Configuration>(`/configuration`);
     },
 
     async getNowPlaying(): Promise<MovieDetails[]> {
-        console.log('START getNowPlaying');
         const response = await get<PageResponse<MovieDetails>>(
             `/movie/now_playing?page=1`
         );
