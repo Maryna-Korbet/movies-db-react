@@ -3,10 +3,9 @@ import { RootState } from '../../store';
 import MovieCard from './MovieCard';
 import { useAppDispatch } from '../../hooks';
 
-import styles from './Movies.module.scss';
-
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
 
 interface MoviesProps {
@@ -22,23 +21,32 @@ function Movies({ movies, loading }: MoviesProps) {
     }, [dispatch]);
 
     return (
-        <section>
-            <div className={styles.list}>
-                {loading
-                    ? (<p>Loading...</p>) 
-                    : (movies.map((movie) => (
-                        <MovieCard
-                            key={movie.id}
-                            id={movie.id}
-                            title={movie.title}
-                            overview={movie.overview}
-                            popularity={movie.popularity}
-                            image={movie.image}
-                        />
-                    ))
-                )}
-            </div>
-        </section>
+        <Container sx={{ py: 8, maxWidth: 'lg', mt: 12}}>
+            <Typography variant="h4" align='center' marginBottom={4} gutterBottom>
+                Now playing
+            </Typography>
+            
+            {loading
+                ? (<LinearProgress color="primary"/>) 
+            : (
+                <Grid container spacing={4}>
+                {
+                    movies.map((movie) => (
+                        <Grid item key={movie.id} xs={12} sm={6} md={4}>
+                            <MovieCard
+                                key={movie.id}
+                                id={movie.id}
+                                title={movie.title}
+                                overview={movie.overview}
+                                popularity={movie.popularity}
+                                image={movie.image}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+                )
+            }
+        </Container>
     );
 };
 

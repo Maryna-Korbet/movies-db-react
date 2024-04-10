@@ -1,7 +1,12 @@
-export function About() {
+import { Container, Typography } from "@mui/material";
+
+export default function About() {
     return (
-        <div>
-            <h1>About</h1>
-        </div>
+        <Container sx={{ py: 8, maxWidth: 'lg', mt: 12}}>
+            <Typography variant="h4" align='center' marginBottom={4} gutterBottom>
+                Coming soon...
+            </Typography>
+        </Container>
     );
 }
+

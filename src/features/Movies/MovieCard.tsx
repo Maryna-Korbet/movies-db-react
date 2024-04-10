@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import styles from './MovieCard.module.scss';
+import { Link as RouterLink } from 'react-router-dom';
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 
 interface Props {
     id: number;
@@ -11,18 +11,25 @@ interface Props {
 
 function MovieCard({ id, title, overview, popularity, image ="/thumbnail.jpg" }: Props) {
     return (
-        <div className={styles.card}>
-            <img
-                className={styles.thumbnail}
-                src={image}
-                alt="Movie thumbnail"
-            />
-            <div className={styles.content}>
-                <Link to={`/movies/${id}`}>{title}</Link>
-                <div className={styles.overview}>{overview}</div>
-                <div className={styles.popularity}>{popularity}</div>
-            </div>
-        </div>
+        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <CardMedia component="div" image={image} sx={{pt: '56.25%'}} title='Movie thumbnail'/>
+            <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant='h5' gutterBottom>
+                    {title}
+                </Typography>                
+                <Typography variant='body2' color='secondary'>
+                    {overview}
+                </Typography>
+                <Typography variant='button' display={'block'} mt={2}>
+                    {popularity}
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button component={RouterLink} to={`/movies/${id}`} color='secondary'>
+                    Details
+                </Button>
+            </CardActions>
+        </Card>
     );
 }
 
