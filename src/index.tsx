@@ -15,15 +15,23 @@ import Movies from './features/Movies/Movies';
 import About from './features/About/About';
 import store from './store';
 import './index.scss';
+import ErrorBoundary from './helpers/ErrorBoundary';
+
+
+function AppEntrypoint() {
+  return (
+    <Provider store={store}>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </Provider>
+  );
+}
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <Provider store={store}>
-        <App />
-      </Provider>
-      ),
+    element: <AppEntrypoint />,
     children: [
       {
         path: '/',
