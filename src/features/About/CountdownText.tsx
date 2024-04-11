@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 export function CountdownText() {
-    const [countdown, setCountdown] = useState(10);
+    const [countdown, setCountdown] = useState(1000);
     const intervalRef = useRef<any>();
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export function CountdownText() {
     });
     
     return (
-        <Typography variant="h3" align="center">
+        <Typography variant="h6" align="center" mb={2}>
             Comming coon: {countdown}
         </Typography>
     );

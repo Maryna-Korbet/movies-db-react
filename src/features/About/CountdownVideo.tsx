@@ -23,8 +23,8 @@ export function CountdownVideo() {
             <CardMedia>
                 <video
                     ref={videoRef}
-                    src="https://www.pixels.com/download/video/3843433"
-                    height="500"
+                    src="https://videos.pexels.com/video-files/4276289/4276289-uhd_3840_2160_30fps.mp4"
+                    height={700} 
                     onPlay={() => setIsPlaying(true)}
                     onPause={() => setIsPlaying(false)}
                 autoPlay loop muted />
