@@ -40,17 +40,27 @@ interface Configuration {
     }
 }
 
-
 interface ITmbdClient {
     getConfiguration: () => Promise<Configuration>;
     getNowPlaying: (page: number) => Promise<PageDetails<MovieDetails>>;
+    getMovies: (page: number, filters: MoviesFilters) => Promise<PageDetails<MovieDetails>>;
+    getKeywords: (query: string) => Promise<KeywordItem[]>
 }
+export interface KeywordItem {
+    id: number
+    name: string
+};
+
+export interface MoviesFilters {
+    keywords?: number[]
+};
 
 export const client: ITmbdClient = {
     getConfiguration: async () => {
         const response = await get<Configuration>("/configuration");
         return response;
     },
+
     getNowPlaying: async (page: number = 1) => {
         const response = await get<PageResponse<MovieDetails>>(`/movie/now_playing?page=${page}`);
         return {
@@ -58,6 +68,28 @@ export const client: ITmbdClient = {
             totalPages: response.total_pages,
             page: response.page,
         };
+    },
+
+    getMovies: async (page: number, filters: MoviesFilters) => {
+        const params = new URLSearchParams({page: page.toString(),});
+
+        if (filters.keywords?.length) {
+            params.append("with_keywords",filters.keywords.join("|"));
+        }
+
+        const qwery = params.toString();
+        const response = await get<PageResponse<MovieDetails>>(`/discover/movie?${qwery}`);
+        
+        return {
+            results: response.results,
+            totalPages: response.total_pages,
+            page: response.page,
+        };
+    },
+
+    getKeywords: async (query: string) => {
+        const response = await get<PageResponse<KeywordItem>>(`/search/keyword?query=${query}`);
+        return response.results;
     },
 }
 

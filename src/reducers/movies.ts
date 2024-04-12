@@ -1,6 +1,7 @@
 import { createReducer, ActionWithPayload } from "../redux/utils";
 import { AppThunk } from "../store";
 import { client } from "../api/tmdb";
+import { MoviesFilters } from "../api/tmdb";
 
 
 export interface Movie {
@@ -34,24 +35,28 @@ const moviesLoading = () => ({
     type: "movies/loading",
 });
 
-export function fetchNextPage(): AppThunk<Promise<void>> {  
+export const resetMovies = () => ({
+    type: "movies/reset",
+});
+
+export function fetchNextPage(filters: MoviesFilters = {}): AppThunk<Promise<void>> {  
     return async (dispatch, getState) => {
         const state = getState();
         const nextPage = state.movies.page + 1;
-        dispatch(fatchPage(nextPage))
+        dispatch(fatchPage(nextPage, filters));
     }
 }
 
-function fatchPage(page: number): AppThunk<Promise<void>> { 
+function fatchPage(page: number, filters: MoviesFilters): AppThunk<Promise<void>> { 
     return async (dispatch) => {
         dispatch(moviesLoading());
 
         const config = await client.getConfiguration();
         const imageUrl = config.images.base_url;
         const imageSize = "w780";
-        const nowPlaying = await client.getNowPlaying(page);
+        const moviesResponse = await client.getMovies(page, filters);
 
-        const mappedResults: Movie[] = nowPlaying.results.map((m: any) => ({
+        const mappedResults: Movie[] = moviesResponse.results.map((m: any) => ({
             id: m.id,
             title: m.title,
             popularity: m.popularity,
@@ -61,7 +66,7 @@ function fatchPage(page: number): AppThunk<Promise<void>> {
                 : undefined,
         }));
 
-        const hasMorePages = nowPlaying.page < nowPlaying.totalPages; 
+        const hasMorePages = moviesResponse.page < moviesResponse.totalPages; 
 
         dispatch(moviesLoaded(mappedResults, page, hasMorePages));
     }
@@ -85,6 +90,9 @@ const moviesReducer = createReducer<MovieState>(
                 loading: true,
             };
         },
+        "movies/reset": () => {
+            return initialState;
+        }
     }
 );
 
