@@ -19,32 +19,45 @@ export interface MovieDetails {
     title: string;
     overview: string;
     popularity: number;
-    backdrop_path?: string;
+    backdrop_path?: string | null;
 }
 
 interface PageResponse<TResult> {
     page: number;
     results: TResult[];
     total_pages: number;
-    total_results: number;
+}
+
+interface PageDetails<T> {
+    page: number;
+    results: T[];
+    totalPages: number;
 }
 
 interface Configuration {
-    base_url: string;
+    images: {
+        base_url: string;
+    }
 }
 
-export const client = {
-    
-    async getConfiguration() {
-        return await get<Configuration>(`/configuration`);
+
+interface ITmbdClient {
+    getConfiguration: () => Promise<Configuration>;
+    getNowPlaying: (page: number) => Promise<PageDetails<MovieDetails>>;
+}
+
+export const client: ITmbdClient = {
+    getConfiguration: async () => {
+        const response = await get<Configuration>("/configuration");
+        return response;
     },
-
-    async getNowPlaying(): Promise<MovieDetails[]> {
-        const response = await get<PageResponse<MovieDetails>>(
-            `/movie/now_playing?page=1`
-        );
-
-        return response.results;
+    getNowPlaying: async (page: number = 1) => {
+        const response = await get<PageResponse<MovieDetails>>(`/movie/now_playing?page=${page}`);
+        return {
+            results: response.results,
+            totalPages: response.total_pages,
+            page: response.page,
+        };
     },
 }
 

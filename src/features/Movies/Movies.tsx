@@ -1,66 +1,59 @@
-import { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { useContext } from 'react';
+import { useEffect,  useContext } from 'react';
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
-import { Movie, fetchMovies } from '../../reducers/movies';
-import { RootState } from '../../store';
 import MovieCard from './MovieCard';
-import { useAppDispatch } from '../../hooks';
+import { fetchNextPage } from '../../reducers/movies';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AuthContext, anonymousUser } from '../../contexts/AuthContext';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
-interface MoviesProps {
-    movies: Movie[];
-    loading: boolean;
-}
-
-function Movies({ movies, loading }: MoviesProps) {
+function Movies() {
     const dispatch = useAppDispatch();
+    const movies = useAppSelector((state) => state.movies.top);
+    const loading = useAppSelector((state) => state.movies.loading);
+    const hasMorePages = useAppSelector((state) => state.movies.hasMorePages);
+
     const { user } = useContext(AuthContext);
     const loggedIn = user !== anonymousUser;
+    const [targetRef, entry] = useIntersectionObserver();
 
     useEffect(() => {
-        dispatch(fetchMovies());
-    }, [dispatch]);
+        if (entry?.isIntersecting && hasMorePages) {
+            dispatch(fetchNextPage());
+        }
+        
+    }, [dispatch, entry?.isIntersecting, hasMorePages]);
 
     return (
         <Container sx={{ py: 8, maxWidth: 'lg', mt: 12}}>
             <Typography variant="h4" align='center' marginBottom={4} gutterBottom>
                 Now playing
             </Typography>
-            
-            {loading
-                ? (<LinearProgress color="primary"/>) 
-            : (
-                <Grid container spacing={4}>
-                {
-                    movies.map((movie) => (
-                        <Grid item key={movie.id} xs={12} sm={6} md={4}>
-                            <MovieCard
-                                key={movie.id}
-                                id={movie.id}
-                                title={movie.title}
-                                overview={movie.overview}
-                                popularity={movie.popularity}
-                                image={movie.image}
-                                enableUserActions={loggedIn}
-                            />
-                        </Grid>
+            <Grid container spacing={4}>
+                {movies.map((movie) => (
+                    <Grid item key={movie.id} xs={12} sm={6} md={4}>
+                        <MovieCard
+                            key={movie.id}
+                            id={movie.id}
+                            title={movie.title}
+                            overview={movie.overview}
+                            popularity={movie.popularity}
+                            image={movie.image}
+                            enableUserActions={loggedIn}
+                        />
+                    </Grid>
                     ))}
-                </Grid>
-                )
-            }
+            </Grid>
+            <div ref={targetRef}>
+                { loading && <LinearProgress
+                    color='primary'
+                    sx={{ mt: 3}}
+                />}
+            </div>
         </Container>
     );
 };
 
-const mapStateToProps = (state: RootState) => ({
-    movies: state.movies.top,
-    loading: state.movies.loading,
-})
-
-const connector = connect(mapStateToProps);
-
-export default connector(Movies);
+export default Movies;
 
 
