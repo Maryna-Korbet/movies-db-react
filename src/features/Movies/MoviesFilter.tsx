@@ -23,22 +23,20 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
         }
     });
 
-    const fetchKeywords = useMemo(
-        () =>
-            debounce(async (query: string) => { 
-                if (query) { 
-                    setKeywordsLoading(true);
+    const fetchKeywordsOptions = async (query: string) => { 
+        if (query) { 
+            setKeywordsLoading(true);
                     
-                    const options = await client.getKeywords(query);
-                    setKeywordsLoading(false);
-                    setKeywordsOptions(options);
-                }
-                else {
-                    setKeywordsOptions([]);
-                }
-            }, 1000),
-        []
-    );
+            const options = await client.getKeywords(query);
+            setKeywordsLoading(false);
+            setKeywordsOptions(options);
+        }
+        else {
+            setKeywordsOptions([]);
+        }
+    }
+    
+    const debounceFetchKeywordsOptions = useMemo(() => debounce(fetchKeywordsOptions , 1000),[]);
 
     const handleApplyFilters = (data: Filters) => {
         onApply(data);
@@ -72,7 +70,7 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
                                         handleApplyFilters({ keywords: [] }); 
                                     }
                                 }}
-                                onInputChange={(__, value) => fetchKeywords(value)}
+                                onInputChange={(__, value) => debounceFetchKeywordsOptions(value)}
                             />
                         )}
                     />    
