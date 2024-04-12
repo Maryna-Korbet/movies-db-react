@@ -46,8 +46,10 @@ export function AppHeader({ onLogin, onLogOut, SwitchComponent }: AppHeaderProps
             <HeaderLink to="/about">About</HeaderLink>
           </nav>
         </Box>
-        <AuthSection onLogin={onLogin} onLogOut={onLogOut} />
-        {SwitchComponent}
+        <Box>
+          <AuthSection onLogin={onLogin} onLogOut={onLogOut} />
+          {SwitchComponent}
+        </Box>
       </Toolbar>
     </AppBar>
   )

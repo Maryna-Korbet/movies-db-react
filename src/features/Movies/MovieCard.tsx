@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Button, Card, CardActions, CardContent, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
 import FavoriteIcon  from '@mui/icons-material/Favorite';
@@ -48,4 +49,4 @@ function MovieCard({
     );
 }
 
-export default MovieCard;
+export default memo(MovieCard);

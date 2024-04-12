@@ -26,6 +26,7 @@ export function SwitchTheme() {
       onChange={toggleThemeMode}
       inputProps={{ 'aria-label': 'toggle theme' }}
       color="primary"
+      sx={{ marginLeft: 3 }}
     />
   );
 
