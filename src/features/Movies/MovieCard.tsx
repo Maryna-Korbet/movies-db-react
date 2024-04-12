@@ -10,6 +10,7 @@ interface Props {
     popularity: number;
     image?: string; 
     enableUserActions?: boolean;
+    onAddToFavorite?(id: number): void;
 }
 
 function MovieCard({
@@ -19,6 +20,7 @@ function MovieCard({
     popularity,
     image = "/thumbnail.jpg",
     enableUserActions,
+    onAddToFavorite,
 }: Props) {
     return (
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -40,7 +42,7 @@ function MovieCard({
                 </Button>
                 {enableUserActions &&
                     <Tooltip title="Add to favorites">
-                        <IconButton>
+                        <IconButton onClick={()=> onAddToFavorite?.(id)}>
                             <FavoriteIcon />
                         </IconButton>
                     </Tooltip>}
