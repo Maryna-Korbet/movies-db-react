@@ -1,8 +1,7 @@
-import { useContext, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import { useAuth0 } from "@auth0/auth0-react";
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
-
 import MovieCard from './MovieCard';
-import { AuthContext, anonymousUser } from '../../contexts/AuthContext';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { MoviesFilter } from './MoviesFilter';
 import { useGetConfigurationQuery, useGetMoviesQuery, MoviesQuery } from '../../services/tmdb';
@@ -15,7 +14,7 @@ const initialQuery = {
 
 function Movies() {
   const [query, setQuery] = useState<MoviesQuery>(initialQuery);
-
+  const { isAuthenticated, user } = useAuth0();
   const { data: configuration } = useGetConfigurationQuery();
   const { data, isFetching } = useGetMoviesQuery(query);
   const movies = data?.results;
@@ -24,9 +23,6 @@ function Movies() {
   function formatImageUrl(imagePath?: string | null) {
     return imagePath && configuration ? `${configuration.images.base_url}w780${imagePath}` : undefined;
   }
-
-  const auth = useContext(AuthContext);
-  const loggedIn = auth.user !== anonymousUser;
 
   const onIntersect = useCallback(() => {
     if (hasMorePages) {
@@ -37,8 +33,8 @@ function Movies() {
   const [targetRef] = useIntersectionObserver({ onIntersect });
 
   const handleAddToFavorites = useCallback(
-    (id: number): void => alert(`Not implemented! Action: ${auth.user.name} is adding movie ${id} to favorites.`),
-    [auth.user.name]
+    (id: number): void => alert(`Not implemented! Action: ${user?.name} is adding movie ${id} to favorites.`),
+    [user?.name]
   );
 
   return (
@@ -71,7 +67,7 @@ function Movies() {
                   overview={movie.overview}
                   popularity={movie.popularity}
                   image={formatImageUrl(movie.backdrop_path)}
-                  enableUserActions={loggedIn}
+                  enableUserActions={isAuthenticated}
                   onAddToFavorite={handleAddToFavorites}
                 />
               </Grid>

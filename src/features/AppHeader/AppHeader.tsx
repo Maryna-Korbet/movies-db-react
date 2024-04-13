@@ -1,4 +1,4 @@
-import React from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import { AppBar, Toolbar, Avatar, Typography, Box} from '@mui/material';
 import logo from '../../svg/logo.svg';
 import { HeaderLink } from '../../helpers/HeaderLink';
@@ -6,12 +6,12 @@ import { AuthSection } from '../../features/AuthSection/AuthSection';
 
 
 export interface AppHeaderProps {
-  onLogin: () => void;
-  onLogOut: () => void;
   SwitchComponent: React.ReactNode;
 }
 
-export function AppHeader({ onLogin, onLogOut, SwitchComponent }: AppHeaderProps) {
+export function AppHeader({ SwitchComponent }: AppHeaderProps) {
+  const { isAuthenticated } = useAuth0();
+
   return (
     <AppBar>
       <Toolbar
@@ -42,6 +42,7 @@ export function AppHeader({ onLogin, onLogOut, SwitchComponent }: AppHeaderProps
             <HeaderLink to="/">Home</HeaderLink>
             <HeaderLink to="/movies">Movies</HeaderLink>
             <HeaderLink to="/rickandmorty">Episodes</HeaderLink>
+            {isAuthenticated && <HeaderLink to="/protected">Protected</HeaderLink>}
             <HeaderLink to="/about">About</HeaderLink>
           </nav>
         </Box>

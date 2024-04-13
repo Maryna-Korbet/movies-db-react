@@ -15,6 +15,7 @@ import store from './store';
 import './index.scss';
 import ErrorBoundary from './helpers/ErrorBoundary';
 import { StatefulAuth0Provider } from './auth/StatefulAuth0Provider';
+import { AuthenticationGuard } from './helpers/AuthenticationGuard';
 
 
 const Home = React.lazy(() => import('./features/Home/Home'));
@@ -22,6 +23,7 @@ const Movies = React.lazy(() => import('./features/Movies/Movies'));
 const About = React.lazy(() => import('./features/About/About'));
 const Episodes = React.lazy(() => import('./features/Episodes/Episodes'));
 const AuthCallback = React.lazy(() => import('./auth/AuthCallback'));
+const Profile = React.lazy(() => import('./features/Profile/Profile'));
 
 function AppEntrypoint() {
   return (
@@ -56,6 +58,12 @@ const router = createBrowserRouter([
         path: 'rickandmorty',
         element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
                   <Episodes />
+                </React.Suspense>,
+      },
+      {
+        path: 'profile',  
+        element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
+                  <AuthenticationGuard component={Profile} />
                 </React.Suspense>,
       },
       {
