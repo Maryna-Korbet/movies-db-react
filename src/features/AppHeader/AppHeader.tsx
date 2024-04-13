@@ -19,8 +19,6 @@ export function AppHeader({ onLogin, onLogOut, SwitchComponent }: AppHeaderProps
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingLeft: '100px',
-          paddingRight: '100px',
         }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
@@ -43,6 +41,7 @@ export function AppHeader({ onLogin, onLogOut, SwitchComponent }: AppHeaderProps
           <nav>
             <HeaderLink to="/">Home</HeaderLink>
             <HeaderLink to="/movies">Movies</HeaderLink>
+            <HeaderLink to="/rickandmorty">Episodes</HeaderLink>
             <HeaderLink to="/about">About</HeaderLink>
           </nav>
         </Box>

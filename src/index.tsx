@@ -19,6 +19,7 @@ import ErrorBoundary from './helpers/ErrorBoundary';
 const Home = React.lazy(() => import('./features/Home/Home'));
 const Movies = React.lazy(() => import('./features/Movies/Movies'));
 const About = React.lazy(() => import('./features/About/About'));
+const Episodes = React.lazy(() => import('./features/Episodes/Episodes'));
 
 function AppEntrypoint() {
   return (
@@ -42,13 +43,19 @@ const router = createBrowserRouter([
                 </React.Suspense>,
       },
       {
-        path: '/movies',
+        path: 'movies',
         element: <React.Suspense fallback={<LinearProgress color='primary' sx={{mt: 1}} />}>
                   <Movies />
                 </React.Suspense>,
       },
       {
-        path: '/about',  
+        path: 'rickandmorty',
+        element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
+                  <Episodes />
+                </React.Suspense>,
+      },
+      {
+        path: 'about',  
         element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
                   <About />
                 </React.Suspense>,

@@ -2,19 +2,19 @@ import { UnknownAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { tmdbApi } from "./services/tmdb";
 import { setupListeners } from "@reduxjs/toolkit/query";
-
+import { tmdbApi } from "./services/tmdb";
+import { rickandmortyApi } from "./services/rickandmorty";
 
 const store = configureStore({
     reducer: {
         [tmdbApi.reducerPath]: tmdbApi.reducer,
+        [rickandmortyApi.reducerPath]: rickandmortyApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(tmdbApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(tmdbApi.middleware, rickandmortyApi.middleware),
 });
 
 setupListeners(store.dispatch);
-
 
 export type AppDispatch = typeof store.dispatch;
 
