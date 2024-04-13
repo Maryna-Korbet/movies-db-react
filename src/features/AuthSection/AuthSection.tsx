@@ -1,21 +1,31 @@
-import { useContext } from 'react';
 import { Typography, Box, Button } from '@mui/material';
-import { AuthContext, anonymousUser } from '../../contexts/AuthContext';
+import { useAuth0 } from '@auth0/auth0-react';
 
 
-export interface AuthSectionProps {
-  onLogin: () => void;
-  onLogOut: () => void;
-}
+export function AuthSection() {
 
-export function AuthSection({ onLogin, onLogOut }: AuthSectionProps) {
-  const { user } = useContext(AuthContext);
-  const loggedIn = user !== anonymousUser;
+  const {loginWithRedirect, isAuthenticated, user, logout} = useAuth0();
 
-  if (loggedIn) {
+  const onLogin = async() => {
+    await loginWithRedirect({
+      appState: {
+        returnTo: "/"
+      }
+    })
+  }
+
+  const onLogOut = () => {
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      }
+    })  
+  }
+
+  if (isAuthenticated) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5}}>
-        <Typography variant='h6' color="secondary" noWrap>Hello, {user.name}!</Typography>
+        <Typography variant='h6' color="secondary" noWrap>Hello, {user?.name}!</Typography>
         <Button
           color="secondary"
           variant='outlined'

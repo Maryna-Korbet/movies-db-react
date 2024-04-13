@@ -46,7 +46,7 @@ export function AppHeader({ onLogin, onLogOut, SwitchComponent }: AppHeaderProps
           </nav>
         </Box>
         <Box>
-          <AuthSection onLogin={onLogin} onLogOut={onLogOut} />
+          <AuthSection />
           {SwitchComponent}
         </Box>
       </Toolbar>

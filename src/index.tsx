@@ -14,20 +14,24 @@ import App from './App';
 import store from './store';
 import './index.scss';
 import ErrorBoundary from './helpers/ErrorBoundary';
+import { StatefulAuth0Provider } from './auth/StatefulAuth0Provider';
 
 
 const Home = React.lazy(() => import('./features/Home/Home'));
 const Movies = React.lazy(() => import('./features/Movies/Movies'));
 const About = React.lazy(() => import('./features/About/About'));
 const Episodes = React.lazy(() => import('./features/Episodes/Episodes'));
+const AuthCallback = React.lazy(() => import('./auth/AuthCallback'));
 
 function AppEntrypoint() {
   return (
-    <Provider store={store}>
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
-    </Provider>
+    <StatefulAuth0Provider>
+      <Provider store={store}>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </Provider>
+    </StatefulAuth0Provider>
   );
 }
 
@@ -59,7 +63,11 @@ const router = createBrowserRouter([
         element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
                   <About />
                 </React.Suspense>,
-      }, 
+      },
+      {
+        path: 'callback',
+        element: <AuthCallback />,
+      }
     ],
   },
 ]);
