@@ -8,15 +8,17 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import reportWebVitals from './reportWebVitals';
+import { LinearProgress } from '@mui/material';
 
 import App from './App';
-import Home from './features/Home/Home';
-import Movies from './features/Movies/Movies';
-import About from './features/About/About';
 import store from './store';
 import './index.scss';
 import ErrorBoundary from './helpers/ErrorBoundary';
 
+
+const Home = React.lazy(() => import('./features/Home/Home'));
+const Movies = React.lazy(() => import('./features/Movies/Movies'));
+const About = React.lazy(() => import('./features/About/About'));
 
 function AppEntrypoint() {
   return (
@@ -35,15 +37,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
+                  <Home />
+                </React.Suspense>,
       },
       {
         path: '/movies',
-        element: <Movies />,
+        element: <React.Suspense fallback={<LinearProgress color='primary' sx={{mt: 1}} />}>
+                  <Movies />
+                </React.Suspense>,
       },
       {
         path: '/about',  
-        element: <About />,
+        element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
+                  <About />
+                </React.Suspense>,
       }, 
     ],
   },
