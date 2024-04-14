@@ -24,6 +24,7 @@ const About = React.lazy(() => import('./features/About/About'));
 const Episodes = React.lazy(() => import('./features/Episodes/Episodes'));
 const AuthCallback = React.lazy(() => import('./auth/AuthCallback'));
 const Profile = React.lazy(() => import('./features/Profile/Profile'));
+const Protected = React.lazy(() => import ('./features/Protected/Protected'));
 
 function AppEntrypoint() {
   return (
@@ -65,6 +66,12 @@ const router = createBrowserRouter([
         element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
                   <AuthenticationGuard component={Profile} />
                 </React.Suspense>,
+      },
+      {
+        path: 'protected',
+        element: <React.Suspense fallback={<LinearProgress color='primary' sx={{ mt: 1 }} />}>
+                    <AuthenticationGuard component={Protected} />
+                  </React.Suspense>,
       },
       {
         path: 'about',  

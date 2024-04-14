@@ -4,7 +4,7 @@ import configuration from "../configuration";
 
 
 interface StatefulAuth0ProviderProps {
-    children: React.ReactNode,
+    children?: React.ReactNode,
 };
 
 const authConfig = {
@@ -12,6 +12,7 @@ const authConfig = {
     clientId: configuration.auth0ClientId!,
     authorizationParams: {
         redirect_uri: configuration.aurh0RedirectUri,
+        audience: configuration.audience,
     }
 }
 
@@ -20,9 +21,10 @@ export function StatefulAuth0Provider({ children }: StatefulAuth0ProviderProps) 
 
     const onRedirectCallback = (appState?: AppState) => {
         navigate(appState?.returnTo || window.location.pathname);
-    }
+    };
+
     return (
-        <Auth0Provider {...authConfig} cacheLocation="localstorage" onRedirectCallback={onRedirectCallback}>
+        <Auth0Provider {...authConfig} useRefreshTokens cacheLocation="localstorage" onRedirectCallback={onRedirectCallback}>
             {children}
         </Auth0Provider>
     )
