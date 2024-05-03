@@ -46,7 +46,7 @@ export function AppHeader({ SwitchComponent }: AppHeaderProps) {
             <HeaderLink to="/about">About</HeaderLink>
           </nav>
         </Box>
-        <Box>
+        <Box style={{ display: 'flex'}}>
           <AuthSection />
           {SwitchComponent}
         </Box>
