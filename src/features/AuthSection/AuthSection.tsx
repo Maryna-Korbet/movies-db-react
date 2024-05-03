@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from "react-router-dom";
+import configuration from "../../configuration";
 import { UserSettingsMenu } from '../UserSettingsMenu/UserSettingsMenu';
 
 
@@ -20,10 +21,12 @@ export function AuthSection() {
   const handleLogout = () => {
     logout({
       logoutParams: {
-        returnTo: window.location.origin,
+        returnTo: configuration.baseUrl,
       },
     });
   };
+
+  console.log("logOut", handleLogout);
 
   return isAuthenticated && user ? (
     <UserSettingsMenu user={user} onLogout={handleLogout} onOpenProfile={() => navigate("/profile")} />

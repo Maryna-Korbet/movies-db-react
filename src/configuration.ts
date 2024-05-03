@@ -7,7 +7,9 @@ const configuration = {
     aurh0RedirectUri: process.env.REACT_APP_AUTH0_CALLBACL_URL,
 
     protectedApiUrl: process.env.REACT_APP_PROTECTED_API_URL,
-    audience: process.env.REACT_APP_PROTECTED_API_AUDIENCE
+    audience: process.env.REACT_APP_PROTECTED_API_AUDIENCE,
+
+    baseUrl: process.env.REACT_APP_BASE_URL
 }
 
 export default configuration;
