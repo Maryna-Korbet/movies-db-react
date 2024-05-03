@@ -30,6 +30,11 @@
 
 This project is a web application for searching movies.
 
+<div display="flax" align="center" gap="100px"> 
+  <img src="./src/images/readm_light.jpg" />
+  <img src="./src/images/readm_dark.jpg" />
+</div>
+
 ## :sparkles: Features
 
 :heavy_check_mark: Filter movies by genres and keywords;\
